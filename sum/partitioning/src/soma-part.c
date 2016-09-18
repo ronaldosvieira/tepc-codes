@@ -12,8 +12,14 @@
 #include <time.h>
 #include "mpi.h"
 
-#define DEBUG 1
+#define DEBUG 0
 #define printflush(s, ...) do {if (DEBUG) {printf(s, ##__VA_ARGS__); fflush(stdout);}} while (0)
+
+static long get_nanos(void) {
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    return (long) ts.tv_sec * 1000000000L + ts.tv_nsec;
+}
 
 int* get_random_nums(int amount) {
     int *rand_nums = (int *) malloc(sizeof(int) * amount);
@@ -36,8 +42,9 @@ int main(int argc, char* argv[]){
 	int p;       /* number of processes */
 	MPI_Status status;   /* return status for receive */
 	
-	/* start up MPI */
+	long start_t, end_t, total_t; /* time measure */
 	
+	/* start up MPI */
 	MPI_Init(&argc, &argv);
 	
 	/* find out process rank */
@@ -74,11 +81,13 @@ int main(int argc, char* argv[]){
 	if (my_rank == 0) {
 		rand_nums = (int*) get_random_nums(amount);
 
-		printf("%d: Created the array: [", my_rank);
+		printflush("%d: Created the array: [", my_rank);
 		for (i = 0; i < amount - 1; i++) {
-			printf("%d, ", rand_nums[i]);
+			printflush("%d, ", rand_nums[i]);
 		}
 		printflush("%d]\n", rand_nums[amount - 1]);
+		
+		start_t = get_nanos();
 
         for (i = 1; i < p; i++) {
             MPI_Send(rand_nums, amount, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -109,8 +118,13 @@ int main(int argc, char* argv[]){
 
 			printflush("%d: Received sum from %d\n", my_rank, i);
 		}
+		
+		end_t = get_nanos();
+		total_t = end_t - start_t;
 
 		printflush("%d: End: Sum is %d\n", my_rank, global_sum);
+		
+		printf("%d: Total elapsed: %ldns\n", my_rank, total_t);
 	/* other ranks send their sums to rank 0 */
 	} else {
 		MPI_Send(&sum, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);

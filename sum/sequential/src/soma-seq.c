@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEBUG 1
+#define DEBUG 0
 #define printflush(s, ...) do {if (DEBUG) {printf(s, ##__VA_ARGS__); fflush(stdout);}} while (0)
 
 static long get_nanos(void) {
@@ -55,9 +55,9 @@ int main(int argc, char* argv[]) {
 
 	rand_nums = (int*) get_random_nums(amount);
 
-	printf("Created the array: [");
+	printflush("Created the array: [");
 	for (i = 0; i < amount - 1; i++) {
-		printf("%d, ", rand_nums[i]);
+		printflush("%d, ", rand_nums[i]);
 	}
 	printflush("%d]\n", rand_nums[amount - 1]);
 
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 	end = get_nanos();
 
 	printflush("Sum is %d\n", sum);
-	printflush("Time elapsed: %ldns\n", end - start);
+	printf("Time elapsed: %ldns\n", end - start);
 
 	return 0;
 }
