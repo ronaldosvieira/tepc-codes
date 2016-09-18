@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : soma-particionamento.c
+ Name        : soma-part.c
  Author      : Ronaldo Vieira
  Version     : 1.0.1
  Copyright   : MIT License

@@ -2,7 +2,7 @@
  ============================================================================
  Name        : soma-seq.c
  Author      : Ronaldo Vieira
- Version     : 1.0.0
+ Version     : 1.1.0
  Copyright   : MIT License
  Description : Soma sequencial de números de uma lista
  ============================================================================
@@ -14,6 +14,12 @@
 
 #define DEBUG 1
 #define printflush(s, ...) do {if (DEBUG) {printf(s, ##__VA_ARGS__); fflush(stdout);}} while (0)
+
+static long get_nanos(void) {
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    return (long) ts.tv_sec * 1000000000L + ts.tv_nsec;
+}
 
 int* get_random_nums(int amount) {
     int *rand_nums = (int *) malloc(sizeof(int) * amount);
@@ -31,6 +37,7 @@ int main(int argc, char* argv[]) {
 
 	int i, sum = 0;
 	int *rand_nums = NULL;
+	long start, end, total;
 
 	if (argc != 2) {
 		printf("Usage: %s (size of array >= 2*p)\n", argv[0]);
@@ -54,11 +61,16 @@ int main(int argc, char* argv[]) {
 	}
 	printflush("%d]\n", rand_nums[amount - 1]);
 
+	start = get_nanos();
+
 	for (i = 0; i < amount; i++) {
 		sum += rand_nums[i];
 	}
+	
+	end = get_nanos();
 
 	printflush("Sum is %d\n", sum);
+	printflush("Time elapsed: %ldns\n", end - start);
 
 	return 0;
 }
