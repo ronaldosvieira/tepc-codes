@@ -2,7 +2,7 @@
  ============================================================================
  Name        : soma-particionamento.c
  Author      : Ronaldo Vieira
- Version     : 1.0.0
+ Version     : 1.0.1
  Copyright   : MIT License
  Description : Soma paralela de números de uma lista utilizando particionamento
  ============================================================================
@@ -46,7 +46,23 @@ int main(int argc, char* argv[]){
 	/* find out number of processes */
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
 
+	if (argc != 2) {
+		if (my_rank == 0)
+			printf("Usage: %s (size of array >= 2*p)\n", argv[0]);
+
+		MPI_Finalize();
+		return -1;
+	}
+
 	int amount = atoi(argv[1]);
+
+	if (amount < 0) {
+		if (my_rank == 0)
+			printf("Error: Size of array must be greater than zero.\n");
+
+		MPI_Finalize();
+		return -1;
+	}
 
 	/* find out which part of the array to sum */
 	int start = ((int) ((1.0 * amount / p) * my_rank));
