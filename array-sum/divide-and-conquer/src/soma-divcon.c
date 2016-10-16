@@ -76,7 +76,7 @@ int recSum(int *rand_nums, int amount, int p, int my_rank, int parent_rank) {
 	}
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
 	srand(time(NULL));
 
 	int i;
