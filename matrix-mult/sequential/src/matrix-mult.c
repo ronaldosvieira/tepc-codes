@@ -98,5 +98,5 @@ int main(int argc, char **argv) {
     printf("Result: \n");
     printMatrix(C, m, n);*/
     
-    printf("Time elapsed: %ld\n", (long) total_t);
+    printf("Time elapsed: %ld\nns", (long) total_t);
 }

@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
     
     start_t = get_nanos();
     
-    #pragma parallel for
+    #pragma parallel for collapse(2)
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             sum = 0;
@@ -100,5 +100,5 @@ int main(int argc, char **argv) {
     printf("Result: \n");
     printMatrix(C, m, n);*/
     
-    printf("Time elapsed: %ld\n", (long) total_t);
+    printf("Time elapsed: %ld\nns", (long) total_t);
 }
