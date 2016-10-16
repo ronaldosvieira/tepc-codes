@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <omp.h>
 
 #define MAX_NUM 5
 
@@ -73,6 +74,7 @@ int main(int argc, char **argv) {
     
     start_t = get_nanos();
     
+    #pragma parallel for
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             sum = 0;
