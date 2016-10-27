@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         }
     }
     
-    egettimeofday(&end_t, NULL);
+    gettimeofday(&end_t, NULL);
     
     total_t = ((end_t.tv_sec  - start_t.tv_sec) * 1000000u + 
          end_t.tv_usec - start_t.tv_usec) / 1.e6;
