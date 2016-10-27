@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/time.h>
 #include <omp.h>
 
 #define MAX_NUM 5
-
-static long get_nanos(void) {
-    struct timespec ts;
-    timespec_get(&ts, TIME_UTC);
-    return (long) ts.tv_sec * 1000000000L + ts.tv_nsec;
-}
 
 int** initMatrix(int m, int n) {
     int** mat = (int**) malloc(sizeof(int*) * m);
@@ -54,7 +49,7 @@ int main(int argc, char **argv) {
     int m, n;
     int sum;
     
-    clock_t start_t, end_t;
+    struct timeval start_t, end_t;
     double total_t;
     
     if (argv[1] == NULL || argv[2] == NULL || 
@@ -73,9 +68,9 @@ int main(int argc, char **argv) {
     generateRandomMatrix(A, m, n);
     generateRandomMatrix(B, m, n);
     
-    start_t = clock();
-    
-    #pragma parallel for collapse(2)
+    gettimeofday(&start_t, NULL);
+
+    #pragma omp parallel for
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             sum = 0;
@@ -87,11 +82,12 @@ int main(int argc, char **argv) {
             C[i][j] = sum;
         }
     }
-    
-    end_t = clock();
-    
-    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-    
+
+    gettimeofday(&end_t, NULL);
+
+    total_t = ((end_t.tv_sec  - start_t.tv_sec) * 1000000u + 
+         end_t.tv_usec - start_t.tv_usec) / 1.e6;
+
     /*printf("Matrix A: \n");
     printMatrix(A, m, n);
     
