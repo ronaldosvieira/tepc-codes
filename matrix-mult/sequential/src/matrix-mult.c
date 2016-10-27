@@ -53,7 +53,8 @@ int main(int argc, char **argv) {
     int m, n;
     int sum;
     
-    int start_t, end_t, total_t;
+    clock_t start_t, end_t;
+    double total_t;
     
     if (argv[1] == NULL || argv[2] == NULL || 
         atoi(argv[1]) < 1 || atoi(argv[2]) < 1) {
@@ -71,7 +72,7 @@ int main(int argc, char **argv) {
     generateRandomMatrix(A, m, n);
     generateRandomMatrix(B, m, n);
     
-    start_t = get_nanos();
+    start_t = clock();
     
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
@@ -85,9 +86,9 @@ int main(int argc, char **argv) {
         }
     }
     
-    end_t = get_nanos();
+    end_t = clock();
     
-    total_t = end_t - start_t;
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
     
     /*printf("Matrix A: \n");
     printMatrix(A, m, n);
@@ -98,5 +99,5 @@ int main(int argc, char **argv) {
     printf("Result: \n");
     printMatrix(C, m, n);*/
     
-    printf("Time elapsed: %ld\nns", (long) total_t);
+    printf("Time elapsed: %lfs\n", total_t);
 }
