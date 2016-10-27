@@ -69,15 +69,13 @@ int main(int argc, char **argv) {
     
     gettimeofday(&start_t, NULL);
     
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            sum = 0;
-            
-            for (int k = 0; k < m; k++) {
-                sum += A[i][k] * B[k][j];
+    int i, j, k;
+    
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            for (k = 0; k < m; k++) {
+                C[i][j] += A[i][k] * B[k][j];
             }
-            
-            C[i][j] = sum;
         }
     }
     
