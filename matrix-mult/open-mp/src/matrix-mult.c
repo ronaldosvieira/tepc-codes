@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
     
     gettimeofday(&start_t, NULL);
 
-    #pragma omp parallel for
+    #pragma omp parallel for collapse(2) private(sum)
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             sum = 0;
